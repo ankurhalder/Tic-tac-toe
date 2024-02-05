@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+import webbrowser
 import random
 
 
@@ -12,6 +13,35 @@ class TicTacToe:
         self.board = [[" " for _ in range(3)] for _ in range(3)]
         self.buttons = []
         self.create_board()
+
+        self.heading_label = tk.Label(
+            self.root,
+            text="Tic Tac Toe By Ankur Halder",
+            font=("Helvetica", 20),
+            bg="#f2f2f2",
+        )
+        self.heading_label.grid(row=0, columnspan=3, pady=(10, 20))
+
+        self.website_label = tk.Label(
+            self.root,
+            text=" ankurhalder.netlify.app ",
+            font=("Helvetica", 12),
+            bg="#f2f2f2",
+        )
+        self.website_label.grid(row=4, column=0, pady=(20, 10), sticky="e")
+
+        self.website_link = tk.Label(
+            self.root,
+            text="Visit My Website",
+            font=("Helvetica", 12, "underline"),
+            bg="#f2f2f2",
+            fg="blue",
+            cursor="hand2",
+        )
+        self.website_link.grid(row=4, column=1, pady=(20, 10), sticky="w")
+        self.website_link.bind(
+            "<Button-1>", lambda e: webbrowser.open("https://ankurhalder.netlify.app")
+        )
 
     def create_board(self):
         for i in range(3):
@@ -27,7 +57,7 @@ class TicTacToe:
                     bg="#ffffff",
                     fg="#000000",
                 )
-                button.grid(row=i, column=j, padx=5, pady=5)
+                button.grid(row=i + 1, column=j, padx=5, pady=5)
                 row_buttons.append(button)
             self.buttons.append(row_buttons)
 
