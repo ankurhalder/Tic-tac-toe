@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+import random
 
 
 class TicTacToe:
@@ -40,6 +41,73 @@ class TicTacToe:
                 self.reset_game()
             else:
                 self.current_player = "O" if self.current_player == "X" else "X"
+                if self.current_player == "O":
+                    self.computer_play()
+
+    def computer_play(self):
+        # Find the best move for the computer
+        best_move = self.find_best_move()
+        row, col = best_move
+        self.board[row][col] = "O"
+        self.buttons[row][col].config(text="O")
+
+        winner = self.check_winner()
+        if winner:
+            messagebox.showinfo("Winner", f"Player {winner} wins!")
+            self.reset_game()
+        elif self.is_board_full():
+            messagebox.showinfo("Tie", "It's a tie!")
+            self.reset_game()
+        else:
+            self.current_player = "X"
+
+    def find_best_move(self):
+        best_score = float("-inf")
+        best_move = None
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] == " ":
+                    self.board[i][j] = "O"
+                    score = self.minimax(self.board, 0, False)
+                    self.board[i][j] = " "
+                    if score > best_score:
+                        best_score = score
+                        best_move = (i, j)
+        return best_move
+
+    def minimax(self, board, depth, is_maximizing):
+        result = self.check_winner()
+        if result:
+            if result == "O":
+                return 1
+            elif result == "X":
+                return -1
+            else:
+                return 0
+
+        if self.is_board_full():
+            return 0
+
+        if is_maximizing:
+            best_score = float("-inf")
+            for i in range(3):
+                for j in range(3):
+                    if board[i][j] == " ":
+                        board[i][j] = "O"
+                        score = self.minimax(board, depth + 1, False)
+                        board[i][j] = " "
+                        best_score = max(score, best_score)
+            return best_score
+        else:
+            best_score = float("inf")
+            for i in range(3):
+                for j in range(3):
+                    if board[i][j] == " ":
+                        board[i][j] = "X"
+                        score = self.minimax(board, depth + 1, True)
+                        board[i][j] = " "
+                        best_score = min(score, best_score)
+            return best_score
 
     def check_winner(self):
         for row in self.board:
