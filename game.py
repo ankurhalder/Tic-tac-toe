@@ -45,7 +45,6 @@ class TicTacToe:
                     self.computer_play()
 
     def computer_play(self):
-        # Find the best move for the computer
         best_move = self.find_best_move()
         row, col = best_move
         self.board[row][col] = "O"
